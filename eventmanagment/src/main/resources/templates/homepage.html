@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Homepage</title>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/bootstrap.min.css}" />
+</head>
+<body>
+	<div class="d-flex justify-content-between align-items-center">
+		<h1> Welcome to Event Management Application,  <span th:text="${#authentication.principal.username}"></span>! </h1>
+		<div class="d-flex align-items-center">
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/listofusers}" class="btn btn-info mr-2">List of Users</a>
+    		</div>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" class="btn btn-danger" value="Sign Out"/>
+            </form>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}" class="btn btn-primary">Log In</a>
+        </div>
+	</div>
+	<div class="container mt-4">
+    <h2>Events List</h2>
+    	<div class="row row-cols-1 row-cols-md-3 g-4">
+			<div th:each="eventsInfo : ${eventsInfos}" class="col">
+				<div class="card h-100">
+					<div class="card-body">
+						<h5 class="card-title" th:text="${eventsInfo.event.eventtitle}"></h5>
+						<p class="card-text" th:text="${eventsInfo.event.description}"></p>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item"><strong>Location:</strong> <span th:text="${eventsInfo.event.location}"></span></li>
+							<li class="list-group-item"><strong>Duration:</strong> <span th:text="${eventsInfo.event.duration}"></span></li>
+							<li class="list-group-item"><strong>Date:</strong> <span th:text="${eventsInfo.event.date}"></span></li>
+							<li class="list-group-item"><strong>Count Of Users:</strong> <span th:text="${eventsInfo.event.countOfUsers}"></span></li>
+						</ul>
+					<div class="card-footer">
+						<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/event/edit/{id}(id=${eventsInfo.event.id})}" class="btn btn-primary">Edit</a>
+						<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/event/delete/{id}(id=${eventsInfo.event.id})}" class="btn btn-danger">Delete</a>
+						
+						<!-- This is a link for RSVP action which will only be displayed if the user has 'USER' authority. 
+						The link is generated using Thymeleaf expressions to pass the user id, event id, and the action (attend/remove). 
+						The button text and style are set dynamically based on whether the user has already attended the event or not. -->
+						<a sec:authorize="hasAuthority('USER')" 
+  							 th:href="@{/rsvplist/{uid}/{eid}/{action}(uid=${#authentication.principal.username},eid=${eventsInfo.event.id},action=${eventsInfo.attended} ? 'remove' : 'attend')}" 
+  							 class="btn" 
+  							 th:classappend="${eventsInfo.attended} ? 'btn-danger' : 'btn-primary'"
+							 th:text="${eventsInfo.attended} ? 'remove' : 'attend'">
+						</a>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div sec:authorize="hasAuthority('ADMIN')">
+          <a th:href="@{/addevent}" class="btn btn-info mr-2">Add Event</a>
+   	</div>
+</body>
+</html>

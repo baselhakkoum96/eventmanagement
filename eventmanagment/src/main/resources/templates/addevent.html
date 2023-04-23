@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Event</title>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/bootstrap.min.css}" />
+</head>
+
+<body>
+    <h1 class="mb-4">Add Event</h1>
+    <form action="#" th:action="@{/addevent}" th:object="${event}" method="post">
+        <div class="form-group">
+            <input type="hidden" th:field="*{id}" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="eventtitle" class="form-label">Event Title</label>
+            <input type="text" class="form-control" th:field="*{eventtitle}" id="eventtitle" />
+        </div>
+        <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" th:field="*{description}" id="description" />
+        </div>
+        <div class="form-group">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" th:field="*{location}" id="location" />
+        </div>
+        <div class="form-group">
+            <label for="date" class="form-label">Date</label>
+			<input type="date" class="form-control" th:field="*{date}" id="date"/>
+        </div>
+        <div class="form-group">
+            <label for="time" class="form-label">Time</label>
+            <input type="text" class="form-control" th:field="*{time}" id="time" />
+        </div>
+        <div class="form-group">
+            <label for="organizer" class="form-label">Organizer</label>
+            <input type="text" class="form-control" th:field="*{organizer}" id="organizer" />
+        </div>
+        <div class="form-group">
+            <label for="category" class="form-label">Category</label>
+            <input type="text" class="form-control" th:field="*{category}" id="category" />
+        </div>
+        <div class="form-group">
+            <label for="duration" class="form-label">Duration</label>
+            <input type="text" class="form-control" th:field="*{duration}" id="duration" />
+        </div>
+        <button type="submit" class="btn btn-primary">Add Event</button>
+    </form>
+</body>
+</html>
